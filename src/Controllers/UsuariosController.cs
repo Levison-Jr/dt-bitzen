@@ -3,6 +3,7 @@ using DTBitzen.Dtos;
 using DTBitzen.Identity;
 using DTBitzen.Models;
 using DTBitzen.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
@@ -31,6 +32,7 @@ namespace DTBitzen.Controllers
         }
 
 
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<IActionResult> BuscarUsuarioPorId(string id)
         {
@@ -96,6 +98,7 @@ namespace DTBitzen.Controllers
                 value: _mapper.Map<Usuario?, UsuarioDto>(resultado.Usuario));
         }
 
+        [Authorize]
         [HttpPut("{id}", Name = nameof(Editar))]
         public async Task<IActionResult> Editar(string id, [FromBody]UsuarioDto usuarioDto)
         {
@@ -108,6 +111,7 @@ namespace DTBitzen.Controllers
             return NoContent();
         }
 
+        [Authorize]
         [HttpDelete("{id}", Name = nameof(Excluir))]
         public async Task<IActionResult> Excluir(string id)
         {
