@@ -3,5 +3,5 @@
     public record UsuarioDto(
         string Id,
         string Nome,
-        string Email);
+        string Email) : BaseDto;
 }

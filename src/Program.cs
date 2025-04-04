@@ -6,6 +6,9 @@ using DTBitzen.Services;
 using DTBitzen.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -98,6 +101,7 @@ namespace DTBitzen
             builder.Services.AddScoped<IUsuarioService, UsuarioService>();
             builder.Services.AddScoped<AspNetUserManager<Usuario>>();
             builder.Services.AddScoped<SignInManager<Usuario>>();
+            builder.Services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
 
             builder.Services.AddAutoMapper(typeof(Program));
 

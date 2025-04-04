@@ -4,32 +4,56 @@ using DTBitzen.Identity;
 using DTBitzen.Models;
 using DTBitzen.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.AspNetCore.Mvc.Routing;
 
 namespace DTBitzen.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     [ApiController]
     public class UsuariosController : ControllerBase
     {
         private readonly IIdentityHelper _identityHelper;
         private readonly IMapper _mapper;
         private readonly IUsuarioService _usuarioService;
+        private readonly IUrlHelper _urlHelper;
 
         public UsuariosController(IIdentityHelper identityHelper,
             IMapper mapper,
-            IUsuarioService usuarioService)
+            IUsuarioService usuarioService,
+            IUrlHelperFactory urlHelperFactory,
+            IActionContextAccessor actionContextAccessor)
         {
             _identityHelper = identityHelper;
             _mapper = mapper;
             _usuarioService = usuarioService;
+            _urlHelper = urlHelperFactory.GetUrlHelper(actionContextAccessor.ActionContext!);
         }
 
 
         [HttpGet("{id}")]
         public async Task<IActionResult> BuscarUsuarioPorId(string id)
         {
-            Usuario? usuario = (await _usuarioService.BuscarPorId(id));
-            return Ok(_mapper.Map<Usuario?, UsuarioDto>(usuario));
+            Usuario? usuario = await _usuarioService.BuscarPorId(id);
+
+            if (usuario is null)
+                return NotFound();
+
+            UsuarioDto usuarioDto = _mapper.Map<Usuario?, UsuarioDto>(usuario);
+
+            usuarioDto.Links.Add(new LinkRef(
+                _urlHelper.Link(nameof(Editar), new { id = usuarioDto.Id })!,
+                "update",
+                "PUT"
+            ));
+
+            usuarioDto.Links.Add(new LinkRef(
+                _urlHelper.Link(nameof(Excluir), new { id = usuarioDto.Id })!,
+                "delete",
+                "DELETE"
+            ));
+
+            return Ok(usuarioDto);
         }
 
         [HttpPost("login")]
@@ -72,7 +96,7 @@ namespace DTBitzen.Controllers
                 value: _mapper.Map<Usuario?, UsuarioDto>(resultado.Usuario));
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("{id}", Name = nameof(Editar))]
         public async Task<IActionResult> Editar(string id, [FromBody]UsuarioDto usuarioDto)
         {
             Usuario usuario = _mapper.Map<UsuarioDto, Usuario>(usuarioDto);
@@ -84,7 +108,7 @@ namespace DTBitzen.Controllers
             return NoContent();
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{id}", Name = nameof(Excluir))]
         public async Task<IActionResult> Excluir(string id)
         {
             bool sucessoNaExclusao = await _usuarioService.Excluir(id);
