@@ -2,6 +2,8 @@
 using DTBitzen.Context;
 using DTBitzen.Identity;
 using DTBitzen.Models;
+using DTBitzen.Repositories;
+using DTBitzen.Repositories.Interfaces;
 using DTBitzen.Services;
 using DTBitzen.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -125,7 +127,15 @@ namespace DTBitzen
             });
 
             builder.Services.AddScoped<IIdentityHelper, IdentityHelper>();
+
             builder.Services.AddScoped<IUsuarioService, UsuarioService>();
+            builder.Services.AddScoped<ISalaService, SalaService>();
+            builder.Services.AddScoped<IReservaService, ReservaService>();
+
+            builder.Services.AddScoped<ISalaRepository, SalaRepository>();
+            builder.Services.AddScoped<IReservaRepository, ReservaRepository>();
+
+
             builder.Services.AddScoped<AspNetUserManager<Usuario>>();
             builder.Services.AddScoped<SignInManager<Usuario>>();
             builder.Services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
