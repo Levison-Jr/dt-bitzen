@@ -2,6 +2,7 @@
 using DTBitzen.Dtos;
 using DTBitzen.Identity;
 using DTBitzen.Models;
+using DTBitzen.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DTBitzen.Controllers
@@ -12,11 +13,15 @@ namespace DTBitzen.Controllers
     {
         private readonly IIdentityHelper _identityHelper;
         private readonly IMapper _mapper;
+        private readonly IUsuarioService _usuarioService;
 
-        public UsuariosController(IIdentityHelper identityHelper, IMapper mapper)
+        public UsuariosController(IIdentityHelper identityHelper,
+            IMapper mapper,
+            IUsuarioService usuarioService)
         {
             _identityHelper = identityHelper;
             _mapper = mapper;
+            _usuarioService = usuarioService;
         }
 
 
@@ -66,14 +71,27 @@ namespace DTBitzen.Controllers
                 value: _mapper.Map<Usuario?, UsuarioDto>(resultado.Usuario));
         }
 
-        [HttpPut("{id}")]
-        public void Editar(int id, [FromBody]string value)
+        [HttpPut("{id:string}")]
+        public async Task<IActionResult> Editar(string id, [FromBody]UsuarioDto usuarioDto)
         {
+            Usuario usuario = _mapper.Map<UsuarioDto, Usuario>(usuarioDto);
+            bool sucessoNaAtualizacao = await _usuarioService.Editar(id, usuario);
+
+            if (!sucessoNaAtualizacao)
+                return BadRequest();
+
+            return NoContent();
         }
 
-        [HttpDelete("{id}")]
-        public void Excluir(int id)
+        [HttpDelete("{id:string}")]
+        public async Task<IActionResult> Excluir(string id)
         {
+            bool sucessoNaExclusao = await _usuarioService.Excluir(id);
+
+            if (!sucessoNaExclusao)
+                return BadRequest();
+
+            return NoContent();
         }
     }
 }
