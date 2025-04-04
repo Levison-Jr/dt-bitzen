@@ -12,6 +12,8 @@
 
         public string HoraFim { get; set; }
 
+        public string Status { get; set; }
+
 
         public int SalaId { get; set; }
 

@@ -43,13 +43,13 @@ namespace DTBitzen.Controllers
 
             UsuarioDto usuarioDto = _mapper.Map<Usuario?, UsuarioDto>(usuario);
 
-            usuarioDto.Links.Add(new LinkRef(
+            usuarioDto.Links!.Add(new LinkRef(
                 _urlHelper.Link(nameof(Editar), new { id = usuarioDto.Id })!,
                 "update",
                 "PUT"
             ));
 
-            usuarioDto.Links.Add(new LinkRef(
+            usuarioDto.Links!.Add(new LinkRef(
                 _urlHelper.Link(nameof(Excluir), new { id = usuarioDto.Id })!,
                 "delete",
                 "DELETE"

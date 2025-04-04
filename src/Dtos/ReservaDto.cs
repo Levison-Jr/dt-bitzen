@@ -6,5 +6,6 @@
         string HoraInicio,
         DateOnly DataFim,
         string HoraFim,
+        string Status,
         int SalaId);
 }
