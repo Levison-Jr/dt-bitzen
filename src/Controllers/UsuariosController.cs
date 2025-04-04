@@ -26,9 +26,10 @@ namespace DTBitzen.Controllers
 
 
         [HttpGet("{id}")]
-        public string BuscarUsuarioPorId(int id)
+        public async Task<IActionResult> BuscarUsuarioPorId(string id)
         {
-            return "value";
+            Usuario? usuario = (await _usuarioService.BuscarPorId(id));
+            return Ok(_mapper.Map<Usuario?, UsuarioDto>(usuario));
         }
 
         [HttpPost("login")]
@@ -71,7 +72,7 @@ namespace DTBitzen.Controllers
                 value: _mapper.Map<Usuario?, UsuarioDto>(resultado.Usuario));
         }
 
-        [HttpPut("{id:string}")]
+        [HttpPut("{id}")]
         public async Task<IActionResult> Editar(string id, [FromBody]UsuarioDto usuarioDto)
         {
             Usuario usuario = _mapper.Map<UsuarioDto, Usuario>(usuarioDto);
@@ -83,7 +84,7 @@ namespace DTBitzen.Controllers
             return NoContent();
         }
 
-        [HttpDelete("{id:string}")]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> Excluir(string id)
         {
             bool sucessoNaExclusao = await _usuarioService.Excluir(id);
