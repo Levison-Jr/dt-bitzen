@@ -2,6 +2,8 @@
 using DTBitzen.Context;
 using DTBitzen.Identity;
 using DTBitzen.Models;
+using DTBitzen.Services;
+using DTBitzen.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -93,6 +95,7 @@ namespace DTBitzen
             });
 
             builder.Services.AddScoped<IIdentityHelper, IdentityHelper>();
+            builder.Services.AddScoped<IUsuarioService, UsuarioService>();
             builder.Services.AddScoped<AspNetUserManager<Usuario>>();
             builder.Services.AddScoped<SignInManager<Usuario>>();
 
