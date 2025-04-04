@@ -9,6 +9,8 @@ namespace DTBitzen.Mapper
         public DtoParaModel()
         {
             CreateMap<UsuarioDto, Usuario>();
+            CreateMap<SalaDto, Sala>();
+            CreateMap<ReservaDto, Reserva>();
         }
     }
 }
