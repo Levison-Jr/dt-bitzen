@@ -1,8 +1,11 @@
-﻿namespace DTBitzen.Dtos
+﻿using System.Text.Json.Serialization;
+
+namespace DTBitzen.Dtos
 {
     public record BaseDto
     {
-        public List<LinkRef> Links { get; set; } = [];
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<LinkRef>? Links { get; set; }
     }
 
     public record LinkRef
