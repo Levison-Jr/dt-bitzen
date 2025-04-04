@@ -14,7 +14,7 @@ namespace DTBitzen
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -110,6 +110,27 @@ namespace DTBitzen
             app.UseAuthorization();
 
             app.MapControllers();
+
+            // Aplicar migrations pendentes ou criar o db inexistente
+            using (var scope = app.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+                var context = services.GetRequiredService<AppDbContext>();
+
+                for (int i = 0; i < 5; i++)
+                {
+                    try
+                    {
+                        await context.Database.MigrateAsync();
+                        break;
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"Erro ao aplicar migrations. Tentativa {i + 1}: {ex.Message}");
+                        await Task.Delay(5000);
+                    }
+                }
+            }
 
             app.Run();
         }
