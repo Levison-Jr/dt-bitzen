@@ -4,6 +4,8 @@ namespace DTBitzen.Models
 {
     public class Agendamento
     {
+        public Guid AgendamentoId { get; set; }
+
         public string UsuarioId { get; set; }
 
         public Guid ReservaId { get; set; }
