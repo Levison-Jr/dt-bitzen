@@ -9,9 +9,11 @@ namespace DTBitzen.Services
     public class ReservaService : IReservaService
     {
         private readonly IReservaRepository _reservaRepository;
-        public ReservaService(IReservaRepository reservaRepository)
+        private readonly ISalaRepository _salaRepository;
+        public ReservaService(IReservaRepository reservaRepository, ISalaRepository salaRepository)
         {
             _reservaRepository = reservaRepository;
+            _salaRepository = salaRepository;
         }
 
         public async Task<IEnumerable<Reserva>> BuscarTodas(DateOnly? filtroData, string? filtroStatus)
@@ -37,6 +39,11 @@ namespace DTBitzen.Services
         {
             try
             {
+                Sala? salaDaReserva = await _salaRepository.BuscarPorId(reserva.SalaId);
+
+                if (salaDaReserva is null || salaDaReserva.Capacidade < usuariosIds.Count)
+                    return false;
+
                 bool existeConflito = await _reservaRepository.ExisteConflitoReservasAtivas(
                     reserva.SalaId,
                     reserva.Data,
