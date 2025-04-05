@@ -42,6 +42,7 @@ namespace DTBitzen.Controllers
                 return NotFound();
 
             UsuarioDto usuarioDto = _mapper.Map<Usuario?, UsuarioDto>(usuario);
+            usuarioDto.Links = [];
 
             usuarioDto.Links!.Add(new LinkRef(
                 _urlHelper.Link(nameof(Editar), new { id = usuarioDto.Id })!,
