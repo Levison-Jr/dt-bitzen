@@ -19,10 +19,10 @@ namespace DTBitzen.Controllers
         [HttpPost]
         public async Task<IActionResult> Criar(SalaRequestDto salaRequestDto)
         {
-            if (string.IsNullOrEmpty(salaRequestDto.nome))
+            if (string.IsNullOrEmpty(salaRequestDto.Nome))
                 return BadRequest();
 
-            bool sucesso = await _salaService.Criar(salaRequestDto.nome, salaRequestDto.capacidade);
+            bool sucesso = await _salaService.Criar(salaRequestDto.Nome, salaRequestDto.Capacidade);
 
             if (!sucesso)
                 return BadRequest();
@@ -33,10 +33,10 @@ namespace DTBitzen.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Editar(int id, SalaRequestDto salaRequestDto)
         {
-            if (string.IsNullOrEmpty(salaRequestDto.nome))
+            if (string.IsNullOrEmpty(salaRequestDto.Nome))
                 return BadRequest();
 
-            bool sucesso = await _salaService.Editar(id, salaRequestDto.nome, salaRequestDto.capacidade);
+            bool sucesso = await _salaService.Editar(id, salaRequestDto.Nome, salaRequestDto.Capacidade);
 
             if (!sucesso)
                 return BadRequest();
