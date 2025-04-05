@@ -113,8 +113,8 @@ namespace DTBitzen.Migrations
                 name: "AspNetUserLogins",
                 columns: table => new
                 {
-                    LoginProvider = table.Column<string>(type: "text", nullable: false),
-                    ProviderKey = table.Column<string>(type: "text", nullable: false),
+                    LoginProvider = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
+                    ProviderKey = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
                     ProviderDisplayName = table.Column<string>(type: "text", nullable: true),
                     UserId = table.Column<string>(type: "text", nullable: false)
                 },
@@ -158,8 +158,8 @@ namespace DTBitzen.Migrations
                 columns: table => new
                 {
                     UserId = table.Column<string>(type: "text", nullable: false),
-                    LoginProvider = table.Column<string>(type: "text", nullable: false),
-                    Name = table.Column<string>(type: "text", nullable: false),
+                    LoginProvider = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
+                    Name = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
                     Value = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
@@ -178,10 +178,10 @@ namespace DTBitzen.Migrations
                 columns: table => new
                 {
                     ReservaId = table.Column<Guid>(type: "uuid", nullable: false),
-                    DataInicio = table.Column<DateOnly>(type: "date", nullable: false),
-                    HoraInicio = table.Column<string>(type: "text", nullable: false),
-                    DataFim = table.Column<DateOnly>(type: "date", nullable: false),
-                    HoraFim = table.Column<string>(type: "text", nullable: false),
+                    Data = table.Column<DateOnly>(type: "date", nullable: false),
+                    HoraInicio = table.Column<TimeOnly>(type: "time", nullable: false),
+                    HoraFim = table.Column<TimeOnly>(type: "time", nullable: false),
+                    Status = table.Column<string>(type: "text", nullable: false),
                     SalaId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
@@ -268,15 +268,9 @@ namespace DTBitzen.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Reservas_DataFim_HoraFim",
+                name: "IX_Reservas_Data_HoraInicio_SalaId_Status",
                 table: "Reservas",
-                columns: new[] { "DataFim", "HoraFim" },
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Reservas_DataInicio_HoraInicio",
-                table: "Reservas",
-                columns: new[] { "DataInicio", "HoraInicio" },
+                columns: new[] { "Data", "HoraInicio", "SalaId", "Status" },
                 unique: true);
 
             migrationBuilder.CreateIndex(

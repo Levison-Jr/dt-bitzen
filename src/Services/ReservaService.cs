@@ -37,6 +37,15 @@ namespace DTBitzen.Services
         {
             try
             {
+                bool existeConflito = await _reservaRepository.ExisteConflitoReservasAtivas(
+                    reserva.SalaId,
+                    reserva.Data,
+                    reserva.HoraInicio,
+                    reserva.HoraFim);
+
+                if (existeConflito)
+                    return false;
+
                 reserva.Agendamentos = [];
 
                 foreach (var usuarioId in usuariosIds)
@@ -59,16 +68,18 @@ namespace DTBitzen.Services
             }
         }
 
-        public async Task<bool> Excluir(Guid reservaId)
+        public async Task<bool> CancelarReserva(Guid reservaId)
         {
             try
             {
-                Reserva? reservaParaExcluir = await _reservaRepository.BuscarPorId(reservaId);
+                Reserva? reservaParaEditar = await _reservaRepository.BuscarPorId(reservaId);
 
-                if (reservaParaExcluir is null)
+                if (reservaParaEditar is null)
                     return false;
 
-                await _reservaRepository.ExcluirAsync(reservaParaExcluir);
+                reservaParaEditar.Status = "CANCELADA";
+
+                await _reservaRepository.EditarAsync(reservaParaEditar);
                 return true;
             }
             catch (Exception)

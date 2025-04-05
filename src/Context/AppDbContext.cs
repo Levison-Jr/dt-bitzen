@@ -13,8 +13,16 @@ namespace DTBitzen.Context
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<Reserva>()
-                .HasIndex(r => new { r.Data, r.HoraInicio })
+                .HasIndex(r => new { r.Data, r.HoraInicio, r.SalaId, r.Status })
                 .IsUnique();
+
+            modelBuilder.Entity<Reserva>()
+                .Property(r => r.HoraInicio)
+                .HasColumnType("time");
+
+            modelBuilder.Entity<Reserva>()
+                .Property(r => r.HoraFim)
+                .HasColumnType("time");
         }
 
         public DbSet<Sala> Salas { get; set; }

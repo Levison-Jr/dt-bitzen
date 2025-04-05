@@ -3,8 +3,8 @@
     public record ReservaDto(
         Guid ReservaId,
         DateOnly Data,
-        string HoraInicio,
-        string HoraFim,
+        TimeOnly HoraInicio,
+        TimeOnly HoraFim,
         string Status,
         int SalaId);
 }

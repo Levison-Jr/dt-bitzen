@@ -60,10 +60,10 @@ namespace DTBitzen.Controllers
             return Created();
         }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Excluir(Guid id)
+        [HttpPatch("{id}")]
+        public async Task<IActionResult> CancelarReserva(Guid id)
         {
-            bool sucesso = await _reservaService.Excluir(id);
+            bool sucesso = await _reservaService.CancelarReserva(id);
 
             if (!sucesso)
                 return BadRequest();

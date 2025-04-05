@@ -14,21 +14,14 @@ namespace DTBitzen.Repositories
             _appDbContext = appDbContext;
         }
 
-        public async Task<IEnumerable<Reserva>> BuscarTodasAsync(DateOnly? filtroData = null,
-            string? filtroHoraiInicio = null,
-            string? filtroHoraFim = null,
+        public async Task<IEnumerable<Reserva>> BuscarTodasAsync(
+            DateOnly? filtroData = null,
             string? filtroStatus = null)
         {
             var query = _appDbContext.Reservas.AsQueryable();
 
             if (filtroData is not null)
                 query = query.Where(r => r.Data == filtroData);
-
-            if (!string.IsNullOrEmpty(filtroHoraiInicio))
-                query = query.Where(r => r.HoraInicio.CompareTo(filtroHoraiInicio) >= 0);
-
-            if (!string.IsNullOrEmpty(filtroHoraFim))
-                query = query.Where(r => r.HoraInicio.CompareTo(filtroHoraFim) <= 0);
 
             if (!string.IsNullOrEmpty(filtroStatus))
                 query = query.Where(r => r.Status == filtroStatus);
@@ -54,7 +47,7 @@ namespace DTBitzen.Repositories
 
         public async Task<IEnumerable<Reserva>> BuscarPorSalaIdAsync(int salaId,
             DateOnly? filtroData,
-            string? filtroStatus)
+            string? filtroStatus = null)
         {
             var query = _appDbContext.Reservas
                 .Where(r => r.SalaId == salaId);
@@ -79,10 +72,27 @@ namespace DTBitzen.Repositories
             await _appDbContext.SaveChangesAsync();
         }
 
-        public async Task ExcluirAsync(Reserva reserva)
+        public async Task EditarAsync(Reserva reserva)
         {
-            _appDbContext.Reservas.Remove(reserva);
+            _appDbContext.Reservas.Update(reserva);
             await _appDbContext.SaveChangesAsync();
+        }
+
+        public async Task<bool> ExisteConflitoReservasAtivas(int salaId,
+            DateOnly data,
+            TimeOnly horaInicio,
+            TimeOnly horaFim)
+        {
+            var conflito = await _appDbContext.Reservas
+            .AnyAsync(r =>
+                r.Data == data &&
+                r.SalaId == salaId &&
+                r.Status == "ATIVA" &&
+                r.HoraInicio < horaFim &&
+                horaInicio < r.HoraFim
+            );
+
+            return conflito;
         }
     }
 }

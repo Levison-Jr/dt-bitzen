@@ -53,13 +53,11 @@ namespace DTBitzen.Migrations
                     b.Property<DateOnly>("Data")
                         .HasColumnType("date");
 
-                    b.Property<string>("HoraFim")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<TimeOnly>("HoraFim")
+                        .HasColumnType("time");
 
-                    b.Property<string>("HoraInicio")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<TimeOnly>("HoraInicio")
+                        .HasColumnType("time");
 
                     b.Property<int>("SalaId")
                         .HasColumnType("integer");
@@ -72,7 +70,7 @@ namespace DTBitzen.Migrations
 
                     b.HasIndex("SalaId");
 
-                    b.HasIndex("Data", "HoraInicio")
+                    b.HasIndex("Data", "HoraInicio", "SalaId", "Status")
                         .IsUnique();
 
                     b.ToTable("Reservas");

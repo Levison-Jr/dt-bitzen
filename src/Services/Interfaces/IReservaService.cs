@@ -16,6 +16,6 @@ namespace DTBitzen.Services.Interfaces
 
         Task<bool> Criar(Reserva reserva, List<string> usuariosIds);
 
-        Task<bool> Excluir(Guid reservaId);
+        Task<bool> CancelarReserva(Guid reservaId);
     }
 }
