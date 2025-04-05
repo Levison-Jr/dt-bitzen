@@ -26,7 +26,7 @@ namespace DTBitzen.Repositories
             if (!string.IsNullOrEmpty(filtroStatus))
                 query = query.Where(r => r.Status == filtroStatus);
 
-            return await query.ToListAsync();
+            return await query.Include(r => r.Agendamentos).ToListAsync();
         }
 
         public async Task<IEnumerable<Reserva>> BuscarPorUsuarioIdAsync(string usuarioId,
