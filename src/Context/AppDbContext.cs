@@ -13,11 +13,7 @@ namespace DTBitzen.Context
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<Reserva>()
-                .HasIndex(r => new { r.DataInicio, r.HoraInicio })
-                .IsUnique();
-
-            modelBuilder.Entity<Reserva>()
-                .HasIndex(r => new { r.DataFim, r.HoraFim })
+                .HasIndex(r => new { r.Data, r.HoraInicio })
                 .IsUnique();
         }
 

@@ -1,38 +1,80 @@
-﻿using DTBitzen.Models;
+﻿using DTBitzen.Context;
+using DTBitzen.Models;
+using DTBitzen.Repositories;
+using DTBitzen.Repositories.Interfaces;
 using DTBitzen.Services.Interfaces;
 
 namespace DTBitzen.Services
 {
     public class ReservaService : IReservaService
     {
-        public Task<IEnumerable<Reserva>> BuscarPorSalaId(int salaId, DateOnly filtroData, string filtroStatus)
+        private readonly IReservaRepository _reservaRepository;
+        public ReservaService(IReservaRepository reservaRepository)
         {
-            throw new NotImplementedException();
+            _reservaRepository = reservaRepository;
         }
 
-        public Task<IEnumerable<Reserva>> BuscarPorUsuarioId(string usuarioId, DateOnly filtroData, string filtroStatus)
+        public async Task<IEnumerable<Reserva>> BuscarTodas()
         {
-            throw new NotImplementedException();
+            return await _reservaRepository.BuscarTodasAsync();
         }
 
-        public Task<IEnumerable<Reserva>> BuscarTodas()
+        public async Task<IEnumerable<Reserva>> BuscarPorUsuarioId(string usuarioId,
+            DateOnly? filtroData,
+            string? filtroStatus)
         {
-            throw new NotImplementedException();
+            return await _reservaRepository.BuscarPorUsuarioIdAsync(usuarioId, filtroData, filtroStatus);
         }
 
-        public Task<bool> Criar(Reserva reserva)
+        public async Task<IEnumerable<Reserva>> BuscarPorSalaId(int salaId,
+            DateOnly? filtroData,
+            string? filtroStatus)
         {
-            throw new NotImplementedException();
+            return await _reservaRepository.BuscarPorSalaIdAsync(salaId, filtroData, filtroStatus);
         }
 
-        public Task<bool> Editar(Guid reservaId, Reserva reserva)
+        public async Task<bool> Criar(Reserva reserva, List<string> usuariosIds)
         {
-            throw new NotImplementedException();
+            try
+            {
+                reserva.Agendamentos = [];
+
+                foreach (var usuarioId in usuariosIds)
+                {
+                    var agendamento = new Agendamento()
+                    {
+                        UsuarioId = usuarioId,
+                        ReservaId = reserva.ReservaId
+                    };
+
+                    reserva.Agendamentos.Add(agendamento);
+                }                
+
+                await _reservaRepository.CriarAsync(reserva);
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
 
-        public Task<bool> Excluir(Guid reservaId)
+        public async Task<bool> Excluir(Guid reservaId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                Reserva? reservaParaExcluir = await _reservaRepository.BuscarPorId(reservaId);
+
+                if (reservaParaExcluir is null)
+                    return false;
+
+                await _reservaRepository.ExcluirAsync(reservaParaExcluir);
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
     }
 }

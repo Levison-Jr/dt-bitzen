@@ -29,7 +29,7 @@ namespace DTBitzen.Controllers
         }
 
         [HttpGet("usuario/{id}")]
-        public async Task<IActionResult> BuscarPorUsuarioId(string id, DateOnly filtroData, string filtroStatus)
+        public async Task<IActionResult> BuscarPorUsuarioId(string id, DateOnly? filtroData, string? filtroStatus)
         {
             var reservasPorUsuario = await _reservaService.BuscarPorUsuarioId(id, filtroData, filtroStatus);
 
@@ -37,7 +37,7 @@ namespace DTBitzen.Controllers
         }
 
         [HttpGet("sala/{id}")]
-        public async Task<IActionResult> BuscarPorSalaId(int id, DateOnly filtroData, string filtroStatus)
+        public async Task<IActionResult> BuscarPorSalaId(int id, DateOnly? filtroData, string? filtroStatus)
         {
             var reservasPorSala = await _reservaService.BuscarPorSalaId(id, filtroData, filtroStatus);
 
@@ -45,29 +45,19 @@ namespace DTBitzen.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Criar([FromBody]CriarReservaDto criarReservaDto)
+        public async Task<IActionResult> Criar([FromBody]CriarReservaDto criarEditarReservaDto)
         {
-            Reserva reserva = _mapper.Map<CriarReservaDto, Reserva>(criarReservaDto);
+            if (criarEditarReservaDto.UsuariosIds is null || criarEditarReservaDto.UsuariosIds.Count == 0)
+                return BadRequest();
 
-            bool sucesso = await _reservaService.Criar(reserva);
+            Reserva reserva = _mapper.Map<CriarReservaDto, Reserva>(criarEditarReservaDto);
+
+            bool sucesso = await _reservaService.Criar(reserva, criarEditarReservaDto.UsuariosIds);
 
             if (!sucesso)
                 return BadRequest();
 
             return Created();
-        }
-
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Editar(Guid id, [FromBody]ReservaDto reserva)
-        {
-            Reserva novosDados = _mapper.Map<ReservaDto, Reserva>(reserva);
-
-            bool sucesso = await _reservaService.Editar(id, novosDados);
-
-            if (!sucesso)
-                return BadRequest();
-
-            return NoContent();
         }
 
         [HttpDelete("{id}")]

@@ -4,11 +4,9 @@
     {
         public Guid ReservaId { get; set; }
 
-        public DateOnly DataInicio { get; set; }
+        public DateOnly Data { get; set; }
 
         public string HoraInicio { get; set; }
-
-        public DateOnly DataFim { get; set; }
 
         public string HoraFim { get; set; }
 

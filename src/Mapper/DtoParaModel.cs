@@ -12,10 +12,7 @@ namespace DTBitzen.Mapper
             CreateMap<SalaDto, Sala>();
             CreateMap<ReservaDto, Reserva>();
 
-            CreateMap<CriarReservaDto, Reserva>()
-                .ForMember(dest =>
-                    dest.Status,
-                    opt => opt.MapFrom(_ => "ATIVA"));
+            CreateMap<CriarReservaDto, Reserva>();
         }
     }
 }

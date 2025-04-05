@@ -2,9 +2,8 @@
 {
     public record ReservaDto(
         Guid ReservaId,
-        DateOnly DataInicio,
+        DateOnly Data,
         string HoraInicio,
-        DateOnly DataFim,
         string HoraFim,
         string Status,
         int SalaId);
