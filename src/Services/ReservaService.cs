@@ -1,6 +1,4 @@
-﻿using DTBitzen.Context;
-using DTBitzen.Models;
-using DTBitzen.Repositories;
+﻿using DTBitzen.Models;
 using DTBitzen.Repositories.Interfaces;
 using DTBitzen.Services.Interfaces;
 

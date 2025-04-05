@@ -1,6 +1,4 @@
-﻿using DTBitzen.Identity;
-
-namespace DTBitzen.Identity
+﻿namespace DTBitzen.Identity
 {
     public interface IIdentityHelper
     {

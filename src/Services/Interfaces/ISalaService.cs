@@ -1,7 +1,4 @@
-﻿using DTBitzen.Dtos;
-using System.Globalization;
-
-namespace DTBitzen.Services.Interfaces
+﻿namespace DTBitzen.Services.Interfaces
 {
     public interface ISalaService
     {

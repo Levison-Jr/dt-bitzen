@@ -2,7 +2,6 @@
 using DTBitzen.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
 
 namespace DTBitzen.Controllers
 {
