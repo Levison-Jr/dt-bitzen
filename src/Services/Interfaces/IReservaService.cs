@@ -4,7 +4,7 @@ namespace DTBitzen.Services.Interfaces
 {
     public interface IReservaService
     {
-        Task<IEnumerable<Reserva>> BuscarTodas();
+        Task<IEnumerable<Reserva>> BuscarTodas(DateOnly? filtroData,string? filtroStatus);
 
         Task<IEnumerable<Reserva>> BuscarPorUsuarioId(string usuarioId,
             DateOnly? filtroData,

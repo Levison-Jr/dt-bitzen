@@ -21,9 +21,9 @@ namespace DTBitzen.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> BuscarTodas()
+        public async Task<IActionResult> BuscarTodas(DateOnly? filtroData, string? filtroStatus)
         {
-            var reservas = await _reservaService.BuscarTodas();
+            var reservas = await _reservaService.BuscarTodas(filtroData, filtroStatus);
 
             return Ok(_mapper.Map<IEnumerable<Reserva>, IEnumerable<ReservaDto>>(reservas));
         }

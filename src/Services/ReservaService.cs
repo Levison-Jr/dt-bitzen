@@ -14,9 +14,9 @@ namespace DTBitzen.Services
             _reservaRepository = reservaRepository;
         }
 
-        public async Task<IEnumerable<Reserva>> BuscarTodas()
+        public async Task<IEnumerable<Reserva>> BuscarTodas(DateOnly? filtroData, string? filtroStatus)
         {
-            return await _reservaRepository.BuscarTodasAsync();
+            return await _reservaRepository.BuscarTodasAsync(filtroData, filtroStatus);
         }
 
         public async Task<IEnumerable<Reserva>> BuscarPorUsuarioId(string usuarioId,
