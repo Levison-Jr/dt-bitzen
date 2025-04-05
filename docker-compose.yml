@@ -1,0 +1,40 @@
+services:
+  api:
+    container_name: webapi
+    build:
+        context: ./src
+        dockerfile: Dockerfile
+    ports:
+        - 4652:8080
+    depends_on: ["dtbitzen-db"]
+    environment:
+      - "ASPNETCORE_HTTP_PORTS=8080"
+      - "ASPNETCORE_ENVIRONMENT=Development"
+      - "ConnectionStrings__DbConnection=User ID=postgres;Password=password;Host=postgresdb;Port=5432;Database=DbDesafioTecnico;Pooling=true;"
+      - "JwtOptions__Issuer=http://localhost"
+      - "JwtOptions__Audience=Audience"
+      - "JwtOptions__SecurityKey=BA6AA7AF-4959-4D5C-916E-EE24C945BFB2"
+      - "JwtOptions__TokenExpiration=900"
+    networks:
+      dtbitzen-network:
+
+
+  dtbitzen-db:
+    container_name: dtbitzen-db
+    image: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    volumes:
+      - "volume-dtbitzen:/var/lib/postgresql/data"
+    networks:
+      dtbitzen-network:
+        aliases:
+          - "postgresdb"
+
+volumes:
+  volume-dtbitzen:
+  
+networks:
+  dtbitzen-network:
+    driver: bridge
